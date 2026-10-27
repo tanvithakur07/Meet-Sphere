@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!-- frontend/pages/meeting.html -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Permissions-Policy" content="camera=*, microphone=*">
+    <title>Meeting — MeetSphere</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/meeting.css">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+</head>
+<body class="meeting-page">
+
+    <!-- Loading Overlay -->
+    <div class="meeting-loading" id="meetingLoading">
+        <div class="loading-spinner"></div>
+        <div class="brand brand--on-dark brand--xl"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M26.87 7.75A16.5 16.5 0 0 1 40.50 24.00"/><path d="M36.64 34.61A16.5 16.5 0 0 1 15.75 38.29"/><path d="M8.50 29.64A16.5 16.5 0 0 1 15.75 9.71"/></g><circle class="core" cx="24" cy="24" r="5"/></svg><span class="brand-word">Meet<b>Sphere</b></span></div>
+        <h2>Joining meeting…</h2>
+        <p>Setting up your camera and microphone</p>
+    </div>
+
+    <!-- Header -->
+    <header class="meeting-header">
+        <div class="meeting-brand">
+            <div class="brand brand--on-dark meeting-brand-icon" title="MeetSphere"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M26.87 7.75A16.5 16.5 0 0 1 40.50 24.00"/><path d="M36.64 34.61A16.5 16.5 0 0 1 15.75 38.29"/><path d="M8.50 29.64A16.5 16.5 0 0 1 15.75 9.71"/></g><circle class="core" cx="24" cy="24" r="5"/></svg></div>
+            <span id="meetingTitle">MeetSphere</span>
+        </div>
+        <div class="meeting-info">
+            <div class="meeting-code-display" title="Click to copy meeting code">
+                <span>📋</span>
+                <span class="code-text" id="meetingCodeDisplay">xxxx-xxxx-xxxx</span>
+            </div>
+            <div class="meeting-clock" id="meetingClock">00:00</div>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="meeting-body">
+
+        <div class="video-area">
+            <div class="screen-share-banner" id="screenShareBanner">
+                <span>🖥️</span>
+                <span>You are sharing your screen</span>
+            </div>
+
+            <!-- Stage: shows the presented screen (hidden until someone shares).
+                 Camera tiles always live in #videoGrid, which turns into a side/bottom strip while presenting. -->
+            <div class="stage-layout" id="stageLayout">
+                <div class="stage" id="stage"></div>
+                <div class="video-grid grid-1" id="videoGrid"></div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-bar">
+                <div class="controls-spacer-left"></div>
+
+                <button class="ctrl-btn on" id="muteBtn" title="Mute / Unmute">
+                    🎤<span class="ctrl-label">Mute</span>
+                </button>
+                <button class="ctrl-btn on" id="cameraBtn" title="Camera ON / OFF">
+                    📷<span class="ctrl-label">Stop Camera</span>
+                </button>
+                <button class="ctrl-btn on share" id="shareBtn" title="Share Screen">
+                    🖥️<span class="ctrl-label">Share Screen</span>
+                </button>
+                <button class="ctrl-btn leave" id="leaveBtn" title="Leave Meeting">
+                    📴<span class="ctrl-label">Leave</span>
+                </button>
+
+                <div class="controls-spacer" style="gap:8px;">
+                    <button class="ctrl-btn on hidden" id="inviteBtn" title="Invite people by email" aria-haspopup="dialog">
+                        ✉️<span class="ctrl-label">Invite</span>
+                    </button>
+                    <button class="ctrl-btn end hidden" id="endBtn" title="End the meeting for everyone">
+                        ⏹️<span class="ctrl-label">End for all</span>
+                    </button>
+                    <button class="ctrl-btn on" id="copyCodeBtn" title="Copy meeting link">
+                        🔗<span class="ctrl-label">Copy Link</span>
+                    </button>
+                    <button class="ctrl-btn on" id="sidebarToggleBtn" title="Toggle Sidebar">
+                        💬<span class="ctrl-label">Chat</span>
+                        <span class="chat-badge hidden" id="chatBadge" aria-live="polite" aria-label="Unread messages"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-tabs">
+                <button class="sidebar-tab active" data-tab="chat">💬 Chat<span class="tab-badge hidden" id="chatTabBadge"></span></button>
+                <button class="sidebar-tab" data-tab="participants">👥 People</button>
+            </div>
+
+            <div class="sidebar-panel active chat-panel" id="chatPanel">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="system-message">👋 Welcome to the meeting!</div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="chat-input-wrapper">
+                        <textarea id="chatInput" class="chat-input"
+                            placeholder="Send a message..." rows="1" maxlength="500"></textarea>
+                        <button id="chatSendBtn" class="chat-send-btn">➤</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-panel" id="participantsPanel">
+                <div class="participants-panel">
+                    <div class="participants-count" id="participantsCount">1 participant</div>
+                    <div id="participantsList"></div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!--
+        NO SockJS — using native WebSocket directly.
+        SockJS was causing 403 errors on its /info endpoint due to
+        Spring Security + Edge Tracking Prevention blocking it.
+    -->
+
+    <!-- Invite by email (opened from the host-only "Invite" button; logic in js/invite.js) -->
+    <div class="modal-backdrop hidden" id="inviteModal" role="dialog" aria-modal="true" aria-labelledby="inviteHeading">
+        <div class="modal-card">
+            <button type="button" class="modal-close" id="inviteCloseBtn" aria-label="Close">&times;</button>
+            <h2 id="inviteHeading">Invite by email</h2>
+            <p class="modal-sub">
+                We'll email each person a link to join <strong id="inviteMeetingName">this meeting</strong>.
+                They'll need a MeetSphere account.
+            </p>
+
+            <label class="modal-label" for="inviteInput">Email addresses</label>
+            <div class="chip-input" id="inviteChipBox">
+                <span class="chips" id="inviteChips"></span>
+                <input type="text" id="inviteInput" inputmode="email" autocomplete="off" autocapitalize="off"
+                       spellcheck="false" placeholder="name@example.com" aria-describedby="inviteHelp">
+            </div>
+            <div class="modal-help" id="inviteHelp">Press Enter, comma or space after each address. Up to 10 at a time.</div>
+
+            <div class="modal-msg error hidden" id="inviteError" role="alert"></div>
+            <div class="modal-msg ok hidden" id="inviteSuccess" role="status"></div>
+            <ul class="invite-failed hidden" id="inviteFailed"></ul>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-ghost" id="inviteCancelBtn">Close</button>
+                <button type="button" class="btn-send" id="inviteSendBtn" disabled>
+                    <span class="btn-spinner hidden" aria-hidden="true"></span>
+                    <span class="btn-label">Send invitations</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/meeting.js"></script>
+    <script src="../js/invite.js"></script>
+
+    <!-- Safety net: hide loading overlay after 8 seconds no matter what -->
+    <script>
+        setTimeout(() => {
+            const o = document.getElementById('meetingLoading');
+            if (o && o.style.display !== 'none') {
+                o.style.display = 'none';
+                console.warn('Loading hidden by 8s safety timeout');
+            }
+        }, 8000);
+    </script>
+</body>
+</html>

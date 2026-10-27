@@ -1,0 +1,16 @@
+# Copy this file to  application-local.properties  (same folder: backend/)
+# That file is git-ignored — never commit real secrets.
+
+spring.datasource.username=
+spring.datasource.password=
+
+# At least 32 characters. Generate one with:  openssl rand -base64 48
+app.jwt.secret=
+
+# ── Email invitations (optional) ──────────────────────────────
+# You can put these here instead of using environment variables. This file is git-ignored.
+# Gmail: use a Google App Password (Google Account → Security → 2-Step Verification → App passwords).
+#spring.mail.username=your.name@gmail.com
+#spring.mail.password=YOUR_16_CHARACTER_APP_PASSWORD
+#app.mail.from=your.name@gmail.com
+#app.frontend.base-url=http://localhost:5500

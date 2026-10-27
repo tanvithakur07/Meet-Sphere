@@ -1,0 +1,25 @@
+# Private local configuration
+application-local.properties
+**/application-local.properties
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Maven build output
+target/
+**/target/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Log files
+*.log
+logs/
+
+# Operating system files
+.DS_Store
+Thumbs.db

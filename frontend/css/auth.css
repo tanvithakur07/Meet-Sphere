@@ -1,0 +1,110 @@
+/* frontend/css/auth.css — Login & Register (split-screen) */
+
+.auth-page { min-height: 100vh; min-height: 100dvh; background: #fff; }
+
+.auth-shell { display: grid; grid-template-columns: 1.05fr 1fr; min-height: 100vh; min-height: 100dvh; }
+
+/* ── Left: brand / showcase ─────────────────────────────────── */
+.auth-hero {
+    position: relative; overflow: hidden; color: #fff;
+    background: radial-gradient(800px 560px at 100% 105%, rgba(34,211,238,.5) 0%, transparent 55%),
+                linear-gradient(145deg, #1F2791 0%, #36279F 100%);
+    padding: 3rem 3.5rem; display: flex; flex-direction: column; justify-content: space-between;
+}
+.auth-hero::before {  /* subtle grid */
+    content: ''; position: absolute; inset: 0; opacity: .12;
+    background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px);
+    background-size: 44px 44px; mask-image: radial-gradient(circle at 30% 30%, #000, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle at 30% 30%, #000, transparent 75%);
+}
+.hero-brand { position: relative; }
+.hero-brand .brand-mark { width: 40px; height: 40px; }
+.hero-body { position: relative; }
+.hero-body h2 { font-size: clamp(2rem, 3.2vw, 3rem); line-height: 1.1; letter-spacing: -.035em; margin-bottom: 1rem; }
+.hero-body h2 span { background: linear-gradient(90deg, #A5F3FC, #FBCFE8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-body > p { color: rgba(255,255,255,.8); font-size: 1.02rem; max-width: 460px; }
+
+/* mock call preview (pure CSS) */
+.call-preview {
+    margin-top: 2.2rem; max-width: 460px; padding: 14px; border-radius: 22px;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22);
+    backdrop-filter: blur(14px); box-shadow: 0 30px 60px rgba(10,10,60,.35);
+    animation: floaty 7s ease-in-out infinite;
+}
+@keyframes floaty { 50% { transform: translateY(-8px); } }
+.call-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.call-tile {
+    position: relative; aspect-ratio: 16/10; border-radius: 14px; overflow: hidden;
+    display: grid; place-items: center; font-weight: 800; font-size: 1.15rem;
+}
+.call-tile b { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.25); backdrop-filter: blur(6px); }
+.call-tile span { position: absolute; left: 8px; bottom: 7px; font-size: .68rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: rgba(0,0,0,.35); }
+.call-tile:nth-child(1) { background: linear-gradient(135deg,#F472B6,#8B5CF6); outline: 2px solid #34D399; outline-offset: -2px; }
+.call-tile:nth-child(2) { background: linear-gradient(135deg,#22D3EE,#3B82F6); }
+.call-tile:nth-child(3) { background: linear-gradient(135deg,#FBBF24,#F97316); }
+.call-tile:nth-child(4) { background: linear-gradient(135deg,#34D399,#0EA5E9); }
+.call-bar { display: flex; justify-content: center; gap: 10px; margin-top: 12px; }
+.call-bar i { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.2); display: grid; place-items: center; font-style: normal; font-size: .85rem; }
+.call-bar i.end { background: #EF4444; width: 46px; border-radius: 17px; }
+
+.hero-points { position: relative; display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: .85rem; font-weight: 600; color: rgba(255,255,255,.88); }
+.hero-points span::before { content: '✓'; margin-right: 7px; width: 18px; height: 18px; display: inline-grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.22); font-size: .65rem; }
+
+/* ── Right: form ────────────────────────────────────────────── */
+.auth-side { position: relative; display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--bg-light); overflow: hidden; }
+.auth-card { position: relative; z-index: 1; width: 100%; max-width: 440px; animation: slideUp .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes slideUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+
+.auth-brand { display: none; text-align: center; margin-bottom: 1.5rem; }   /* shown on mobile only */
+.auth-brand p { font-size: .88rem; margin-top: 8px; }
+
+.auth-panel {
+    background: rgba(255,255,255,.85); backdrop-filter: blur(18px);
+    border: 1px solid #fff; border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg); padding: 2.4rem 2.2rem;
+}
+.auth-title { font-size: 1.7rem; letter-spacing: -.03em; margin-bottom: .3rem; }
+.auth-subtitle { font-size: .92rem; color: var(--text-secondary); margin-bottom: 1.7rem; }
+
+.btn-auth {
+    width: 100%; padding: 14px; font: 700 .98rem var(--font); border: none; cursor: pointer;
+    border-radius: var(--radius-md); color: #fff; margin-top: .6rem;
+    background: var(--grad-brand); background-size: 140% 140%; box-shadow: var(--glow);
+    transition: var(--transition);
+}
+.btn-auth:hover:not(:disabled) { transform: translateY(-2px); background-position: 100% 50%; box-shadow: 0 14px 36px rgba(91,108,255,.5); }
+.btn-auth:active:not(:disabled) { transform: translateY(0); }
+.btn-auth:disabled { opacity: .7; cursor: not-allowed; }
+
+.auth-footer { text-align: center; margin-top: 1.6rem; font-size: .9rem; color: var(--text-secondary); }
+.auth-footer a { font-weight: 700; }
+
+.input-group { position: relative; }
+.input-group .form-control { padding-right: 48px; }
+.input-group .eye-toggle {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    width: 34px; height: 34px; border-radius: 10px; border: none; background: transparent;
+    cursor: pointer; font-size: 1rem; transition: var(--transition);
+}
+.input-group .eye-toggle:hover { background: var(--primary-light); }
+
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 1.25rem 0; color: var(--text-light); font-size: .8rem; }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Password strength (register) */
+.strength-bar-wrapper { height: 5px; background: #E8EBFA; border-radius: 99px; margin-top: 9px; overflow: hidden; }
+.strength-bar { height: 100%; width: 0; border-radius: 99px; transition: width .3s ease, background .3s ease; }
+.strength-label { font-size: .74rem; margin-top: 4px; font-weight: 700; min-height: 1em; }
+
+@media (max-width: 900px) {
+    .auth-shell { grid-template-columns: 1fr; }
+    .auth-hero { display: none; }
+    .auth-brand { display: block; }
+    .auth-side { align-items: flex-start; padding-top: 2.5rem; }
+}
+@media (max-width: 480px) {
+    .auth-panel { padding: 1.8rem 1.4rem; border-radius: 22px; }
+}
+
+/* The decorative blobs belong to the form column only — `fixed` let them bleed over the hero panel */
+.auth-side .aurora { position: absolute; }

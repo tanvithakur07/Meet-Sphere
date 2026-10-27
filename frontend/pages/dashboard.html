@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!-- frontend/pages/dashboard.html — Dashboard: Create or Join a meeting -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — MeetSphere</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+</head>
+<body class="dashboard-page">
+
+    <div class="aurora"><i></i></div>
+
+    <!-- ── Navbar ── -->
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand brand" aria-label="MeetSphere home"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M26.87 7.75A16.5 16.5 0 0 1 40.50 24.00"/><path d="M36.64 34.61A16.5 16.5 0 0 1 15.75 38.29"/><path d="M8.50 29.64A16.5 16.5 0 0 1 15.75 9.71"/></g><circle class="core" cx="24" cy="24" r="5"/></svg><span class="brand-word">Meet<b>Sphere</b></span></a>
+        <div class="navbar-user">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <span class="user-name" id="userNameDisplay">User</span>
+            <button class="btn-account" id="changePasswordBtn" type="button" title="Change password" aria-haspopup="dialog">
+                <span aria-hidden="true">🔒</span><span class="btn-account-label">Change password</span>
+            </button>
+            <button class="btn-logout" id="logoutBtn">Sign Out</button>
+        </div>
+    </nav>
+
+    <!-- ── Main ── -->
+    <main class="dashboard-main">
+
+        <div class="dashboard-greeting">
+            <div class="greeting-chip">Ready to connect</div>
+            <h1 id="greetingName">Hello!</h1>
+            <p>Create a new meeting or join an existing one — no downloads, no waiting.</p>
+        </div>
+
+        <div class="action-grid">
+
+            <!-- Create -->
+            <div class="action-card">
+                <div class="action-icon blue">🎥</div>
+                <h3>Start a New Meeting</h3>
+                <p>Create an instant meeting room and invite others with a shareable code.</p>
+
+                <div class="form-group">
+                    <label for="meetingTitle">Meeting title (optional)</label>
+                    <input type="text" id="meetingTitle" class="form-control"
+                           placeholder="e.g. Team Standup"
+                           maxlength="100">
+                </div>
+
+                <div id="createAlert" class="alert"></div>
+
+                <button id="createMeetingBtn" class="btn btn-primary btn-full btn-lg">
+                    🎥 Start New Meeting
+                </button>
+            </div>
+
+            <!-- Join -->
+            <div class="action-card">
+                <div class="action-icon green">🔗</div>
+                <h3>Join a Meeting</h3>
+                <p>Enter the meeting code shared by the host to jump right in.</p>
+
+                <div class="form-group">
+                    <label for="joinCode">Meeting code</label>
+                    <div class="join-input-group">
+                        <input type="text" id="joinCode" class="form-control"
+                               placeholder="xxxx-xxxx-xxxx"
+                               maxlength="14"
+                               autocomplete="off"
+                               spellcheck="false">
+                    </div>
+                </div>
+
+                <div id="joinAlert" class="alert"></div>
+
+                <button id="joinMeetingBtn" class="btn btn-secondary btn-full btn-lg">
+                    🔗 Join Meeting
+                </button>
+            </div>
+
+        </div>
+
+        <!-- How it works -->
+        <h2 class="section-title">How it works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div><h4>Create a room</h4><p>One click gives you a unique meeting code.</p></div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div><h4>Share the code</h4><p>Send the code to anyone you want to invite.</p></div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div><h4>Talk face to face</h4><p>Video, chat and screen share, directly peer-to-peer.</p></div>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="tips-card">
+            <h3>💡 Tips for a great meeting</h3>
+            <ul class="tips-list">
+                <li>Use headphones to reduce echo</li>
+                <li>Find a quiet, well-lit space</li>
+                <li>Test your camera before joining</li>
+                <li>Mute when not speaking</li>
+                <li>Share your screen for presentations</li>
+                <li>Use chat for links and notes</li>
+            </ul>
+        </div>
+
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- Change password (opened from the navbar; logic in js/account.js) -->
+    <div class="pw-backdrop hidden" id="passwordModal" role="dialog" aria-modal="true" aria-labelledby="passwordHeading">
+        <div class="pw-card">
+            <button type="button" class="pw-close" id="passwordCloseBtn" aria-label="Close">&times;</button>
+            <h2 id="passwordHeading">Change password</h2>
+            <p class="pw-sub">Enter your current password, then choose a new one.</p>
+
+            <div id="passwordAlert" class="alert" role="alert"></div>
+
+            <form id="changePasswordForm" novalidate autocomplete="off">
+                <div class="form-group">
+                    <label for="currentPassword">Current password</label>
+                    <div class="pw-field">
+                        <input type="password" id="currentPassword" class="form-control" autocomplete="current-password" required>
+                        <button type="button" class="pw-toggle" data-target="currentPassword" aria-pressed="false" aria-label="Show current password">Show</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">New password</label>
+                    <div class="pw-field">
+                        <input type="password" id="newPassword" class="form-control" autocomplete="new-password" required>
+                        <button type="button" class="pw-toggle" data-target="newPassword" aria-pressed="false" aria-label="Show new password">Show</button>
+                    </div>
+                    <ul class="pw-rules" id="passwordRules" aria-live="polite">
+                        <li data-rule="length">At least 8 characters</li>
+                        <li data-rule="mix">At least one letter and one number</li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm new password</label>
+                    <div class="pw-field">
+                        <input type="password" id="confirmPassword" class="form-control" autocomplete="new-password" required>
+                        <button type="button" class="pw-toggle" data-target="confirmPassword" aria-pressed="false" aria-label="Show confirmation password">Show</button>
+                    </div>
+                    <ul class="pw-rules" aria-live="polite"><li data-rule="match">Matches the new password</li></ul>
+                </div>
+
+                <div class="pw-actions">
+                    <button type="button" class="btn btn-secondary" id="passwordCancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="passwordSubmitBtn">
+                        <span class="spinner hidden" id="passwordSpinner" aria-hidden="true"></span>
+                        <span id="passwordSubmitLabel">Change password</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/account.js"></script>
+</body>
+</html>

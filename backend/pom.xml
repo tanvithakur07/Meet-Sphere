@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- pom.xml — Maven build descriptor for MeetSphere backend -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Spring Boot parent manages all dependency versions -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.meetsphere</groupId>
+    <artifactId>meetsphere-backend</artifactId>
+    <version>1.0.0</version>
+    <name>MeetSphere Backend</name>
+    <description>Video Conferencing Backend — Spring Boot</description>
+
+    <properties>
+        <java.version>17</java.version>
+        <!-- JWT library version -->
+        <jjwt.version>0.11.5</jjwt.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ── Spring Web: REST controllers ───────────────────────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- ── Spring Security: authentication & authorization ──────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- ── Spring WebSocket: signaling & real-time chat ─────────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <!-- ── Spring Data JPA + Hibernate ORM ───────────────────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- ── MySQL JDBC driver ─────────────────────────────────── -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ── Bean Validation (e.g. @NotBlank) ─────────────────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- ── Email: JavaMailSender + SMTP (meeting invitations) ── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <!-- ── JJWT: create & validate JSON Web Tokens ───────────── -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ── Lombok: reduces boilerplate (getters/setters) ─────── -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- ── Test: JUnit 5 + Spring Test ───────────────────────── -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <!-- Resources packaged into the application (target/classes → the JAR) -->
+        <resources>
+            <!-- The backend's own resources: application.properties, mail templates, ... -->
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <!-- The frontend (../frontend) is packaged under static/ — Spring Boot serves everything in
+                 classpath:/static at the web root, so frontend/index.html is http://localhost:8080/ and
+                 frontend/pages/login.html is http://localhost:8080/pages/login.html.
+                 One source of truth: no copy of the frontend lives inside the backend folder. -->
+            <resource>
+                <directory>${project.basedir}/../frontend</directory>
+                <targetPath>static</targetPath>
+                <excludes>
+                    <exclude>**/*.md</exclude>
+                    <exclude>**/.DS_Store</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- Spring Boot Maven plugin: creates executable JAR -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- Exclude Lombok from the final JAR -->
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!-- frontend/pages/register.html — Registration Page -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — MeetSphere</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+</head>
+<body class="auth-page">
+
+    <div class="auth-shell">
+        <!-- ── Showcase (hidden on mobile) ── -->
+        <aside class="auth-hero">
+            <div class="brand brand--on-dark brand--lg hero-brand"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M26.87 7.75A16.5 16.5 0 0 1 40.50 24.00"/><path d="M36.64 34.61A16.5 16.5 0 0 1 15.75 38.29"/><path d="M8.50 29.64A16.5 16.5 0 0 1 15.75 9.71"/></g><circle class="core" cx="24" cy="24" r="5"/></svg><span class="brand-word">Meet<b>Sphere</b></span></div>
+
+            <div class="hero-body">
+                <h2>Meet anyone,<br><span>anywhere.</span></h2>
+                <p>Crystal-clear peer-to-peer video, live chat and screen sharing — all from a single shareable code.</p>
+
+                <div class="call-preview" aria-hidden="true">
+                    <div class="call-grid">
+                        <div class="call-tile"><b>AJ</b><span>Alice</span></div>
+                        <div class="call-tile"><b>RK</b><span>Rohan</span></div>
+                        <div class="call-tile"><b>MS</b><span>Meera</span></div>
+                        <div class="call-tile"><b>You</b><span>You</span></div>
+                    </div>
+                    <div class="call-bar"><i>🎤</i><i>📷</i><i>🖥️</i><i class="end">📴</i></div>
+                </div>
+            </div>
+
+            <div class="hero-points">
+                <span>Peer-to-peer video</span>
+                <span>Screen sharing</span>
+                <span>Live chat</span>
+                <span>Instant meeting codes</span>
+            </div>
+        </aside>
+
+        <!-- ── Form side ── -->
+        <main class="auth-side">
+            <div class="aurora"><i></i></div>
+
+            <div class="auth-card">
+
+                <div class="auth-brand">
+                    <div class="brand brand--xl"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M26.87 7.75A16.5 16.5 0 0 1 40.50 24.00"/><path d="M36.64 34.61A16.5 16.5 0 0 1 15.75 38.29"/><path d="M8.50 29.64A16.5 16.5 0 0 1 15.75 9.71"/></g><circle class="core" cx="24" cy="24" r="5"/></svg><span class="brand-word">Meet<b>Sphere</b></span></div>
+                    <p>Start meeting in seconds</p>
+                </div>
+
+                <div class="auth-panel">
+                    <div id="registerAlert" class="alert" role="alert"></div>
+
+                    <form id="registerForm" novalidate>
+                        <h2 class="auth-title">Create your account ✨</h2>
+                        <p class="auth-subtitle">Free forever. No credit card required.</p>
+
+                        <div class="form-group">
+                            <label for="regName">Full name</label>
+                            <input type="text" id="regName" class="form-control"
+                                   placeholder="Alice Johnson"
+                                   autocomplete="name" required minlength="2">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regEmail">Email address</label>
+                            <input type="email" id="regEmail" class="form-control"
+                                   placeholder="alice@example.com"
+                                   autocomplete="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" class="form-control"
+                                   placeholder="At least 6 characters"
+                                   autocomplete="new-password" required minlength="6">
+                            <div class="strength-bar-wrapper">
+                                <div class="strength-bar" id="strengthBar"></div>
+                            </div>
+                            <div class="strength-label" id="strengthText"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regConfirm">Confirm password</label>
+                            <input type="password" id="regConfirm" class="form-control"
+                                   placeholder="Repeat your password"
+                                   autocomplete="new-password" required>
+                        </div>
+
+                        <button type="submit" id="registerSubmit" class="btn-auth">
+                            🚀 Create Account
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        Already have an account?
+                        <a href="login.html">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</body>
+</html>
